@@ -15,7 +15,14 @@ describe Oystercard do
 
     it 'should raise an error if trying to go above max balance' do
       error1 = "Balance cannot exceed £#{Oystercard::MAX_BALANCE}."
-      expect{oystercard.top_up(Oystercard::MAX_BALANCE + 1)}.to raise_error(error1)
+      excess = Oystercard::MAX_BALANCE + 1
+      expect{oystercard.top_up(excess)}.to raise_error(error1)
+    end
+  end
+
+  describe '#deduct' do
+    it 'should decrease balance by given amount' do
+      expect{ oystercard.deduct(3) }.to change{ oystercard.balance }.by(-3)
     end
   end
 end
