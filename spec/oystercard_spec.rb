@@ -32,8 +32,14 @@ describe Oystercard do
 
   describe '#touch_in' do
     it 'should set in_journey to true' do
+      oystercard.instance_variable_set(:@balance, 1)
       oystercard.touch_in
       expect(oystercard).to be_in_journey
+    end
+    it 'should raise an error if balance is below minimum' do
+      oystercard.instance_variable_set(:@balance, 0)
+      error2 = "Balance must be above £#{Oystercard::MIN_BALANCE}."
+      expect { oystercard.touch_in }.to raise_error(error2)
     end
   end
 
