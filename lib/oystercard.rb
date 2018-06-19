@@ -1,6 +1,8 @@
+require 'journey'
+
 class Oystercard
   MAX_BALANCE = 90
-  MIN_BALANCE = 1
+  MIN_BALANCE = Journey::MINIMUM_FARE
 
   def initialize
     @balance = 0
@@ -18,16 +20,19 @@ class Oystercard
     @balance += amount
   end
 
-  def deduct(amount)
-    @balance -= amount
-  end
-
   def touch_in
     raise "Balance must be above £#{MIN_BALANCE}." if balance < MIN_BALANCE
     @in_journey = true
   end
 
   def touch_out
+    deduct(Journey::MINIMUM_FARE)
     @in_journey = false
+  end
+
+  private
+
+  def deduct(amount)
+    @balance -= amount
   end
 end

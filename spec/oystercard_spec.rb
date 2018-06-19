@@ -1,4 +1,5 @@
 require 'oystercard'
+require 'journey'
 
 describe Oystercard do
   let(:oystercard) { Oystercard.new }
@@ -21,6 +22,7 @@ describe Oystercard do
   end
 
   describe '#deduct' do
+    Oystercard.send(:public, :deduct)
     it 'should decrease balance by given amount' do
       expect { oystercard.deduct(3) }.to change { oystercard.balance }.by(-3)
     end
@@ -48,6 +50,11 @@ describe Oystercard do
       oystercard.instance_variable_set(:@in_journey, true)
       oystercard.touch_out
       expect(oystercard).not_to be_in_journey
+    end
+
+    it 'should deduct the minimum fare from balance' do
+      min = Journey::MINIMUM_FARE
+      expect { oystercard.touch_out }.to change { oystercard.balance }.by(-min)
     end
   end
 end
