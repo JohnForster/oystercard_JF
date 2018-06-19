@@ -33,21 +33,29 @@ describe Oystercard do
   end
 
   describe '#touch_in' do
+    let(:entry_station) { double :station }
     it 'should set in_journey to true' do
       oystercard.instance_variable_set(:@balance, 1)
-      oystercard.touch_in
+      oystercard.touch_in(entry_station)
       expect(oystercard).to be_in_journey
     end
     it 'should raise an error if balance is below minimum' do
       oystercard.instance_variable_set(:@balance, 0)
       error2 = "Balance must be above £#{Oystercard::MIN_BALANCE}."
-      expect { oystercard.touch_in }.to raise_error(error2)
+      expect { oystercard.touch_in(entry_station) }.to raise_error(error2)
     end
+    it 'should record the entry station' do
+      oystercard.instance_variable_set(:@balance, Oystercard::MIN_BALANCE + 1)
+      expect(Journey).to receive(:new).with(entry_station)
+      oystercard.touch_in(entry_station)
+    end
+
   end
 
   describe '#touch_out' do
     it 'should set in_journey to false' do
-      oystercard.instance_variable_set(:@in_journey, true)
+      journey = double(:journey)
+      oystercard.instance_variable_set(:current_journey, journey)
       oystercard.touch_out
       expect(oystercard).not_to be_in_journey
     end
