@@ -1,15 +1,17 @@
-require 'journey'
+require './lib/journey'
 
 class Oystercard
   MAX_BALANCE = 90
   MIN_BALANCE = Journey::MINIMUM_FARE
 
+  attr_reader :balance, :past_journeys
+
   def initialize
     @balance = 0
     @in_journey = false
+    @past_journeys = []
+    @current_journey = nil
   end
-
-  attr_reader :balance
 
   def in_journey?
     !!@current_journey
@@ -25,13 +27,19 @@ class Oystercard
     begin_journey(entry_station)
   end
 
-  def touch_out
+  def touch_out(exit_station)
     deduct(Journey::MINIMUM_FARE)
+    # complete the journey (add exit_station to @current_journey)
+    @past_journeys << @current_journey
     @current_journey = nil
   end
 
   def entry_station
     @current_journey.entry_station
+  end
+
+  def list_past_journeys
+    @past_journeys
   end
 
   private

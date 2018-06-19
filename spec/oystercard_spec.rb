@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'oystercard'
 require 'journey'
 
@@ -49,20 +51,35 @@ describe Oystercard do
       expect(Journey).to receive(:new).with(entry_station)
       oystercard.touch_in(entry_station)
     end
-
   end
 
   describe '#touch_out' do
+    let(:exit_station) { double :station }
     it 'should set in_journey to false' do
       journey = double(:journey)
-      oystercard.instance_variable_set(:current_journey, journey)
-      oystercard.touch_out
+      oystercard.instance_variable_set(:@current_journey, journey)
+      oystercard.touch_out(exit_station)
       expect(oystercard).not_to be_in_journey
     end
 
     it 'should deduct the minimum fare from balance' do
       min = Journey::MINIMUM_FARE
-      expect { oystercard.touch_out }.to change { oystercard.balance }.by(-min)
+      expect { oystercard.touch_out(exit_station) }.to change { oystercard.balance }.by(-min)
+    end
+
+    it 'should store the completed journey' do
+      journey = double(:journey, end_journey: true)
+      oystercard.instance_variable_set(:@current_journey, journey)
+      oystercard.touch_out(exit_station)
+      expect(oystercard.past_journeys).to include journey
+    end
+  end
+
+  describe '#list_past_journeys' do
+    it 'should return an array of past journeys' do
+      journey = double(:journey)
+      oystercard.instance_variable_set(:@past_journeys, [journey])
+      expect(oystercard.list_past_journeys).to include journey
     end
   end
 end
