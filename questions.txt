@@ -1,0 +1,3 @@
+* Writing from scratch with Journey class. Is this bad practice? Is it better to
+  write all in one file and refactor out, like in challenges?
+* Is instance_variable_set bad practice?
