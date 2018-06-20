@@ -3,9 +3,8 @@ class Journey
   MINIMUM_FARE = 1
   PENALTY_FARE = 6
 
-  def initialize(entry_station = nil, exit_station = nil)
+  def initialize(entry_station = nil)
     @entry_station = entry_station
-    @exit_station = exit_station
     @in_progress = true
   end
 
@@ -13,13 +12,16 @@ class Journey
 
   def fare
     @entry_station && @exit_station ? MINIMUM_FARE : PENALTY_FARE
+
   end
 
   def complete(exit_station)
     @exit_station = exit_station
     @in_progress = false
+    # call #fare
   end
 
+  # ?? Send back to Oystercard instance #in_journey? ??
   def in_progress?
     @in_progress
   end
