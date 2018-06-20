@@ -3,7 +3,7 @@ require 'journey'
 describe Journey do
   it { is_expected.to respond_to(:entry_station) }
   let(:journey) { Journey.new('Shoreditch') }
-  
+
   describe '#initialize' do
     it 'should set the entry station' do
       expect(journey.entry_station).to eq 'Shoreditch'

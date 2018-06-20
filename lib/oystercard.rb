@@ -13,7 +13,6 @@ class Oystercard
     # @in_journey = false
     # @past_journeys = []
     # @current_journey = nil
-
   end
 
   def in_journey?

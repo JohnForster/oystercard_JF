@@ -10,6 +10,7 @@ class JourneyLog
   end
 
   def end_journey(exit_station)
+    create_finished_journey(exit_station) if !@current_journey
     @current_journey.complete(exit_station)
     reset
   end
@@ -23,5 +24,9 @@ class JourneyLog
   def reset
     @past_journeys << @current_journey
     @current_journey = nil
+  end
+
+  def create_finished_journey(exit_station)
+    @current_journey = Journey.new
   end
 end
