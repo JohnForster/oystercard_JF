@@ -34,9 +34,10 @@ class Oystercard
     @current_journey = nil
   end
 
-  def entry_station
-    @current_journey.entry_station
-  end
+  # unnecessary? Rename?
+  # def entry_station
+  #   @current_journey.entry_station
+  # end
 
   def list_past_journeys
     @past_journeys
