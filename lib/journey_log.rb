@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Logs the Journeys made for an Oystercard class.
 class JourneyLog
   attr_reader :current_journey, :past_journeys, :in_journey
   def initialize(journey_class)
@@ -10,7 +13,7 @@ class JourneyLog
   end
 
   def end_journey(exit_station)
-    create_finished_journey(exit_station) if !@current_journey
+    create_finished_journey(exit_station) unless @current_journey
     @current_journey.complete(exit_station)
     reset
   end
@@ -27,6 +30,6 @@ class JourneyLog
   end
 
   def create_finished_journey(exit_station)
-    @current_journey = Journey.new
+    @current_journey = Journey.new(exit_station)
   end
 end
